@@ -34,3 +34,17 @@ but please note - it has our own opinionated Linting and Typescript by default: 
 - Please **do not** spend more than 4 hours.
 - **Send us an email with a link to repository when you finish the assesment**.
 - **Optionally, send us a link to a deployed version on Vercel or any other service that will expose that API for testing**.
+
+## Development 
+
+### Build
+```
+yarn install
+yarn build
+```
+
+### Running
+```
+yarn start
+```
+
