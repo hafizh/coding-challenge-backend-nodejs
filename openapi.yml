@@ -1,0 +1,96 @@
+openapi: "3.0.0"
+info:
+  description: "An API for managing stolen bike cases"
+  version: "1.0.0"
+  title: "Stolen Bike Cases"
+servers: 
+  - url: http://localhost:3000
+    description: "Local server"
+paths:
+  /stolen-bikes:
+    post:
+      summary: "Create a new stolen bike case"
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StolenBikeParam'
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StolenBike'
+    get:
+      summary: "Update an existing pet"
+      responses:
+        "200":
+          description: "Returns all reported cases"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stolen_bikes: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/StolenBike'
+      
+  /stolen-bikes/{id}:
+    patch:
+      summary: "Mark the case resolved"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The case id of the stolen bike case"
+        required: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: "The case is marked as resulved"
+        "404":
+          description: "The case for given id is not found"
+      
+components:
+  schemas:
+    StolenBikeParam:
+      type: "object"
+      required: 
+        - serial_number
+        - owner
+      properties:
+        serial_number:
+          type: "integer"
+          format: "int64"
+        owner:
+          type: "string"
+        label: 
+          type: "string"
+    StolenBike:
+      type: "object"
+      required: 
+        - id
+        - serial_number
+        - owner
+        - status
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        serial_number:
+          type: "integer"
+          format: "int64"
+        owner:
+          type: "string"
+        label: 
+          type: "string"
+        status:
+          type: "string"
+          description: "Status of the case"
+          enum:
+          - "new"
+          - "assigned"
+          - "resolved"
+          - "ignored"
