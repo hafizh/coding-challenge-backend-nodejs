@@ -17,7 +17,7 @@ router.post('/stolen-bikes', async (req, res) => {
 });
 
 router.patch('/stolen-bikes/:id', async (req, res) => {
-    const result = await stolenBikesService.maskFound(parseInt(req.params.id))
+    const result = await stolenBikesService.markFound(parseInt(req.params.id))
 
     res.status(200).send('PATCH stolen bike case resolved ' + result);
 });

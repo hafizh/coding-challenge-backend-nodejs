@@ -1,13 +1,16 @@
+import { StolenBike } from '../models/index';
+import { StolenBikeCreationAttributes } from '../models/stolenbike';
+
 export default class StolenBikesService {
-    async createNewCase(stolenBike: object) {
-        return JSON.stringify(stolenBike);
+    async createNewCase(stolenBike: StolenBikeCreationAttributes) {
+        return StolenBike.create(stolenBike);
     }
 
-    async maskFound(caseId: number) {
+    async markFound(caseId: number) {
         return caseId;
     }
 
     async getAllStolenBikeCases() {
-        return "All bikes";
+        return StolenBike.findAll();
     }
 }
