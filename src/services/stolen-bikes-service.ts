@@ -3,14 +3,20 @@ import { StolenBikeCreationAttributes } from '../models/stolenbike';
 
 export default class StolenBikesService {
     async createNewCase(stolenBike: StolenBikeCreationAttributes) {
-        return StolenBike.create(stolenBike);
+        return await StolenBike.create(stolenBike);
     }
 
     async markFound(caseId: number) {
+        const caseFound = await StolenBike.findByPk(caseId)
+        
+        if (caseFound) {
+            caseFound.update("status", "resolved");
+        }
+
         return caseId;
     }
 
     async getAllStolenBikeCases() {
-        return StolenBike.findAll();
+        return await StolenBike.findAll();
     }
 }

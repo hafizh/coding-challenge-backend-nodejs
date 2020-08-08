@@ -14,7 +14,7 @@ interface StolenBikeAttributes {
 
 export interface StolenBikeCreationAttributes extends Optional<StolenBikeAttributes, 'id' | 'label'>{}
 
-class StolenBike extends Model<StolenBikeAttributes, StolenBikeCreationAttributes> {
+export class StolenBike extends Model<StolenBikeAttributes, StolenBikeCreationAttributes> {
   public id!: number;
   public owner!: string;
   public serialNumber!: number;
@@ -22,7 +22,7 @@ class StolenBike extends Model<StolenBikeAttributes, StolenBikeCreationAttribute
   public status: StolenBikeStatus = 'new';
 
   public assignedTo!: HasOneGetAssociationMixin<PoliceOfficer>;
-  
+
   public static associations: {
     policeOfficer: Association<StolenBike, PoliceOfficer>;
   }
@@ -46,4 +46,4 @@ export default (sequelize: Sequelize) => {
   
   
   return StolenBike;
-};
+}
