@@ -1,22 +1,26 @@
-import { StolenBike } from '../models/index';
-import { StolenBikeCreationAttributes } from '../models/stolenbike';
+import { StolenBike as stolenBike } from '../models/index';
+import { StolenBikeCreationAttributes, StolenBike } from '../models/stolenbike';
+import { StolenBikeCaseNotFound } from '../exceptions';
 
 export default class StolenBikesService {
-    async createNewCase(stolenBike: StolenBikeCreationAttributes) {
-        return await StolenBike.create(stolenBike);
+    async createNewCase(params: StolenBikeCreationAttributes) {
+        const created = await stolenBike.create(params)
+        return created.toJSON();
     }
 
     async markFound(caseId: number) {
-        const caseFound = await StolenBike.findByPk(caseId)
+        const caseFound = await stolenBike.findByPk(caseId)
         
         if (caseFound) {
-            caseFound.update("status", "resolved");
+            await caseFound.update({status: 'resolved'});
+            return caseFound.toJSON();
         }
 
-        return caseId;
+        throw new StolenBikeCaseNotFound(`No Case with ${caseId} found!`);
     }
 
     async getAllStolenBikeCases() {
-        return await StolenBike.findAll();
+        const cases = await stolenBike.findAll()
+        return cases.map((c: StolenBike) => c.toJSON())
     }
 }

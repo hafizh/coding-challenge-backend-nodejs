@@ -1,5 +1,5 @@
 'use strict';
-import { Model, DataTypes, Sequelize, Optional, Association, HasOneGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes, Sequelize, Optional, Association, HasOneGetAssociationMixin, HasOneSetAssociationMixin } from 'sequelize';
 import { PoliceOfficer } from './policeofficer';
 
 type StolenBikeStatus = "new" | "assigned" | "resolved" | "ignored"
@@ -19,9 +19,10 @@ export class StolenBike extends Model<StolenBikeAttributes, StolenBikeCreationAt
   public owner!: string;
   public serialNumber!: number;
   public label!: string;
-  public status: StolenBikeStatus = 'new';
+  public status!: StolenBikeStatus;
 
   public assignedTo!: HasOneGetAssociationMixin<PoliceOfficer>;
+  public assignTo!: HasOneSetAssociationMixin<PoliceOfficer, number>;
 
   public static associations: {
     policeOfficer: Association<StolenBike, PoliceOfficer>;
@@ -43,7 +44,6 @@ export default (sequelize: Sequelize) => {
     sequelize,
     modelName: 'StolenBike',
   });
-  
   
   return StolenBike;
 }

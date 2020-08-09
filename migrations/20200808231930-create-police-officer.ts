@@ -1,23 +1,15 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('StolenBikes', {
+    await queryInterface.createTable('PoliceOfficer', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      owner: {
-        type: Sequelize.STRING
-      },
-      label: {
-        type: Sequelize.STRING
-      },
-      serialNumber: {
-        type: Sequelize.NUMBER
-      },
-      status: {
+      name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
@@ -28,13 +20,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      policeOfficer: {
+      stolenBikeCase: {
         type: Sequelize.INTEGER,
         foreignKey: true
       }
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('StolenBikes');
+    await queryInterface.dropTable('PoliceOfficer');
   }
 };
