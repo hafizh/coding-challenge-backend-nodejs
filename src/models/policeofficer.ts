@@ -1,35 +1,33 @@
 'use strict';
-import { Model, DataTypes, Sequelize, Optional, Association, HasOneGetAssociationMixin } from 'sequelize';
-import { StolenBike } from './stolenbike';
+import { Model, Optional, Association, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Sequelize, Op } from 'sequelize';
+import { StolenBikeCase } from './stolenbikecase';
 
-interface PoliceOfficerAttributes {
+export interface PoliceOfficerAttributes {
   id: number;
   name: string;
 }
 
 interface PoliceOfficerCreationAttributes extends Optional<PoliceOfficerAttributes, 'id'> {}
 
-export class PoliceOfficer extends Model<PoliceOfficerAttributes, PoliceOfficerCreationAttributes> {
+export class PoliceOfficer extends Model<PoliceOfficerAttributes, PoliceOfficerCreationAttributes> 
+implements PoliceOfficerAttributes {
   public id!: number;
   public name!: string;
 
-  public investigatingCase!: HasOneGetAssociationMixin<StolenBike>;
-  public static associations: {
-    stolenBikeCase: Association<PoliceOfficer, StolenBike>;
-  }
-}
+  public getCase!: HasOneGetAssociationMixin<StolenBikeCase>;
+  public assignCase!: HasOneSetAssociationMixin<StolenBikeCase, StolenBikeCase["id"]>;
 
-export default (sequelize: Sequelize) => {
-  PoliceOfficer.init({
-    id: {
-      type: DataTypes.NUMBER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    name: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'PoliceOfficer',
-  });
-  return PoliceOfficer;
+  public readonly case?: StolenBikeCase;
+
+  public static associations: {
+    case: Association<PoliceOfficer, StolenBikeCase>;
+  }
+
+  public static async findFreeOfficer() {
+    return this.findOne(
+      {
+        include: [this.associations.case],
+        where: Sequelize.where(Sequelize.col(`caseId`), Op.is, null)
+      });
+  }
 }

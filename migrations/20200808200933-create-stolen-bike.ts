@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('StolenBikes', {
+    await queryInterface.createTable('StolenBikeCases', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -28,13 +28,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      policeOfficer: {
+      policeOfficerId: {
         type: Sequelize.INTEGER,
-        foreignKey: true
+        references: {
+          model: 'PoliceOfficers',
+          key: 'id'
+        }
       }
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('StolenBikes');
+    await queryInterface.dropTable('StolenBikeCases');
   }
 };
